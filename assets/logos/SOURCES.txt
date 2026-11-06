@@ -1,0 +1,10 @@
+Official retailer website icons, downloaded for the interactive classroom prototype.
+
+Sephora: https://www.sephora.com/img/ufe/favicon.ico
+Ulta: https://www.ulta.com/favicon.ico
+Amazon: https://www.amazon.com/favicon.ico
+Walmart: https://www.walmart.com/favicon.ico
+Target: https://www.target.com/favicon.ico
+Nordstrom: https://www.nordstrom.com/favicon.ico
+
+Retailer marks belong to their owners. Products and offers in this prototype are fictional examples.
