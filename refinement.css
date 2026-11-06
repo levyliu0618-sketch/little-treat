@@ -53,3 +53,7 @@
 #buddy-fab .dog{background:var(--paper);border-radius:50%;padding:5px;width:100%;height:100%}
 #buddy-fab:after{width:12px;height:12px;right:0;bottom:0}
 #nudge{bottom:172px}
+
+/* A shared 4 CSS-pixel contour follows every product, never its rectangular crop. */
+.product-cutout{display:block;overflow:visible;background:transparent;filter:url(#product-sticker-outline);mix-blend-mode:normal;flex-shrink:0}
+.product-cutout>svg{display:block;width:100%;height:100%;overflow:hidden}

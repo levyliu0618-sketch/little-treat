@@ -32,15 +32,21 @@ let tab='home',room='bath',query='',category='All',compId='wash',size='full',exp
 function persist(){try{localStorage.setItem('little-treat-v1',JSON.stringify(state))}catch{toast('Storage is full. This change will last for this session.')}}
 let artClipId=0;
 function cropArt(file,box,dimensions,cls,label=''){const id='art-clip-'+(++artClipId);return `<svg class="${cls}" viewBox="${box.join(' ')}" preserveAspectRatio="xMidYMid meet" ${label?`role="img" aria-label="${esc(label)}"`:'aria-hidden="true"'}><defs><clipPath id="${id}"><rect x="${box[0]}" y="${box[1]}" width="${box[2]}" height="${box[3]}"/></clipPath></defs><image clip-path="url(#${id})" href="assets/artwork/${file}.png" width="${dimensions[0]}" height="${dimensions[1]}"/></svg>`}
+// Keep original product pixels; use the edited cutout only as an alpha mask.
+// The HTML wrapper applies one screen-space outline, independent of sprite scale.
+function productSticker(file,box,dimensions,cls,label){
+ const id='product-mask-'+(++artClipId);
+ return `<span class="${cls}" role="img" aria-label="${esc(label)}"><svg viewBox="${box.join(' ')}" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><mask id="${id}" maskUnits="userSpaceOnUse" x="${box[0]}" y="${box[1]}" width="${box[2]}" height="${box[3]}" style="mask-type:alpha"><image href="assets/artwork/${file}-cutout.png" width="${dimensions[0]}" height="${dimensions[1]}" filter="url(#product-alpha-clean)"/></mask></defs><image href="assets/artwork/${file}.png" width="${dimensions[0]}" height="${dimensions[1]}" mask="url(#${id})"/></svg></span>`;
+}
 function art(p,variant="full"){
  if(p.photo)return `<img class="item-photo" src="${esc(p.photo)}" alt="${esc(p.name)}">`;
- if(p.type==='wash'&&!/oat milk/i.test(p.name)&&(variant==='mini'||p.volume===100))return cropArt('almond-body-wash-100ml',[390,145,473,985],[1254,1254],'product-cutout mini-bottle',p.name+' · 100 ml');
- const care=[[140,95,184,330],[560,100,146,327],[994,100,139,327],[143,501,177,308],[573,502,114,309],[892,593,268,201],[115,952,220,215],[521,909,215,269],[994,900,149,275]];
- const clothes=[[25,40,461,444],[540,28,458,460],[1164,15,231,485],[38,576,451,364],[642,535,283,440]];
+ if(p.type==='wash'&&!/oat milk/i.test(p.name)&&(variant==='mini'||p.volume===100))return productSticker('almond-body-wash-100ml',[390,145,473,985],[1254,1254],'product-cutout mini-bottle',p.name+' · 100 ml');
+ const care=[[140,95,170,332],[550,100,156,327],[945,100,166,327],[142,498,168,312],[566,501,123,301],[894,592,270,202],[110,954,229,216],[524,908,208,270],[944,899,183,278]];
+ const clothes=[[22,38,468,446],[534,28,468,460],[1164,14,234,485],[39,607,452,342],[595,538,338,436]];
  const clothing=['sweater','shirt','pants','shoes','bag'];
- if(clothing.includes(p.type))return cropArt('wardrobe-products',clothes[clothing.indexOf(p.type)],[1536,1024],'product-cutout clothing',p.name);
+ if(clothing.includes(p.type))return productSticker('wardrobe-products',clothes[clothing.indexOf(p.type)],[1536,1024],'product-cutout clothing',p.name);
  const i=p.type==='wash'?(p.id==='o1'||/oat milk/i.test(p.name)?0:1):p.type==='bottle'?(/conditioner/i.test(p.name)?3:2):p.type==='dropper'?4:p.type==='jar'?(/face|daily cream/i.test(p.name)?6:5):p.type==='perfume'?7:p.type==='lipstick'?8:2;
- return cropArt('care-products',care[i],[1254,1254],'product-cutout',p.name);
+ return productSticker('care-products',care[i],[1254,1254],'product-cutout',p.name);
 }
 function character(){return cropArt('girl-three-poses',[60,100,490,785],[1774,887],'line-character')}
 function cat(pose='peek'){const boxes={sit:[175,50,400,555],peek:[704,240,432,328],think:[124,630,360,590],sleep:[615,889,577,293]};return cropArt('dog-four-poses',boxes[pose],[1263,1246],'cat dog')}
@@ -131,6 +137,6 @@ render();
 function fitPhone(){const compact=window.innerWidth<=760;const scale=compact?1:Math.min(1,Math.max(.48,(window.innerHeight-170)/874));document.documentElement.style.setProperty('--phone-scale',scale);}
 window.addEventListener('resize',fitPhone);fitPhone();
 
-for(const file of ['bathroom','wardrobe','vanity','dog-four-poses','girl-three-poses','care-products','wardrobe-products','almond-body-wash-100ml']){const preload=new Image();preload.src='assets/artwork/'+file+'.png';}
+for(const file of ['bathroom','wardrobe','vanity','dog-four-poses','girl-three-poses','care-products','wardrobe-products','almond-body-wash-100ml','care-products-cutout','wardrobe-products-cutout','almond-body-wash-100ml-cutout']){const preload=new Image();preload.src='assets/artwork/'+file+'.png';}
 
 $('.wordmark').onclick=e=>{e.preventDefault();navigate('home')};
