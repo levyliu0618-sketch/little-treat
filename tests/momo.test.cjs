@@ -50,3 +50,7 @@ test('irrelevant personal stock is withheld for gifts, ingredients, checkout and
  }
  assert.ok(contextFor({...fixture,message:'I just want the scent'}).context.inventory);
 });
+
+test('non-price model context exposes percentages without tempting volume arithmetic',()=>{
+ const d=buildRequest(fixture);assert.equal(d.context.inventory.retrieved[0].remaining,75);assert.equal(d.context.inventory.retrieved[0].volume,undefined);assert.equal(d.context.inventory.retrieved[0].estimatedMlLeft,undefined);assert.equal(d.context.selectedProduct.fullMl,undefined);assert.equal(d.context.selectedProduct.hasMini,true);
+});
