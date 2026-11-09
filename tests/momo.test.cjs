@@ -54,3 +54,9 @@ test('irrelevant personal stock is withheld for gifts, ingredients, checkout and
 test('non-price model context exposes percentages without tempting volume arithmetic',()=>{
  const d=buildRequest(fixture);assert.equal(d.context.inventory.retrieved[0].remaining,75);assert.equal(d.context.inventory.retrieved[0].volume,undefined);assert.equal(d.context.inventory.retrieved[0].estimatedMlLeft,undefined);assert.equal(d.context.selectedProduct.fullMl,undefined);assert.equal(d.context.selectedProduct.hasMini,true);
 });
+
+test('focused tasks do not load the general inventory-joke instruction',()=>{
+ for(const message of ['Buy this for me','Is this good for dry skin?','What is the live price?','A gift for my friend']){
+ const d=buildRequest({...fixture,message});assert.ok(d.payload.systemInstruction.parts[0].text.includes('TASK:')||d.payload.systemInstruction.parts[0].text.includes('CURRENT TURN: A gift'));assert.ok(!d.payload.systemInstruction.parts[0].text.includes('affectionate joke'));
+ }
+});
