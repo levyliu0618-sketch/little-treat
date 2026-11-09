@@ -12,8 +12,9 @@ module.exports=async function handler(req,res){
  if(!allow(String(req.headers['x-forwarded-for']||'local').split(',')[0]))return res.status(429).json({error:'rate_limit',message:'A tiny breather: please wait a minute, then try again.'});
  let data;
  try{const body=typeof req.body==='string'?JSON.parse(req.body):req.body;if(!body||JSON.stringify(body).length>45000)throw Error();data=buildRequest(body,process.env.MOMO_SYSTEM_VERSION==='v1'?'v1':'v2');}catch{return res.status(400).json({error:'invalid_request',message:'That message could not be read. Please try a shorter message.'});}
- const model=process.env.GEMINI_MODEL||'gemini-2.5-flash-lite';
+ const model=process.env.GEMINI_MODEL||'gemini-3.5-flash-lite';
  if(!/^[a-z0-9.-]+$/.test(model))return res.status(503).json({error:'configuration',message:'Live chat needs a model configuration check.'});
+ data.payload.generationConfig.thinkingConfig=model.startsWith('gemini-2.5')?{thinkingBudget:0}:{thinkingLevel:'minimal'};
  try{
   const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':process.env.GEMINI_API_KEY},body:JSON.stringify(data.payload),signal:AbortSignal.timeout(23000)});
   if(!response.ok){const quota=response.status===429;let reason='';try{const e=await response.json();const m=String(e.error?.message||'');reason=/API key not valid|API_KEY_INVALID/i.test(m)?'invalid_key':/leaked/i.test(m)?'blocked_key':/has not been used|disabled/i.test(m)?'api_disabled':/not found|not supported/i.test(m)?'model_unavailable':/permission|denied/i.test(m)?'permission_denied':''}catch{}return res.status(quota?429:502).json({error:quota?'provider_quota':'provider_error',providerStatus:response.status,reason,message:quota?'Gemini’s free quota is busy or used up. Try again later, or choose the labeled demo.':'Gemini could not reply just now. Try again, or choose the labeled demo.'});}

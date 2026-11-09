@@ -50,7 +50,7 @@ Artwork was AI-generated for this prototype. Retailer logos belong to their resp
 
 ## Live Gemini deployment
 
-Import this repository into Vercel with the Other preset, root directory `/`, no build command and no custom output directory. Use the free Hobby plan for this personal prototype. Add `GEMINI_API_KEY` as a **sensitive server environment variable** before deployment. Never put it in app.js, GitHub, a URL, or client-visible variables. `GEMINI_MODEL` defaults to `gemini-2.5-flash-lite`; `MOMO_SYSTEM_VERSION` defaults to `v2`. Free availability/quota is determined by the Google project; this code does not activate billing.
+Import this repository into Vercel with the Other preset, root directory `/`, no build command and no custom output directory. Use the free Hobby plan for this personal prototype. Add `GEMINI_API_KEY` as a **sensitive server environment variable** before deployment. Never put it in app.js, GitHub, a URL, or client-visible variables. `GEMINI_MODEL` defaults to `gemini-3.5-flash-lite`; `MOMO_SYSTEM_VERSION` defaults to `v2`. Free availability/quota is determined by the Google project; this code does not activate billing.
 
 The same-origin `/api/chat` endpoint runs on Vercel. GitHub Pages remains a static prototype with a clearly labeled fallback. Use the Vercel URL for real chat. The frontend does not switch quietly to scripts on failure.
 

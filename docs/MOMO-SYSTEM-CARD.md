@@ -5,7 +5,7 @@ A personal shopping companion that helps someone reflect on a purchase, compare 
 
 Browser → POST /api/chat → input validation → lexical retrieval from inventory and seven shopping notes → deterministic demo prices → Gemini generateContent → labeled reply.
 
-Production default: `gemini-2.5-flash-lite`, temperature 0.55, maximum output 600 tokens, thinking budget 0. Model selection is a server environment setting. No API key goes into the browser.
+Production default: `gemini-3.5-flash-lite`, temperature 0.55, maximum output 600 tokens, minimal thinking. Model selection is a server environment setting. No API key goes into the browser.
 
 ## Instructions and iterations
 Exact executable instructions: `lib/momo.cjs`, exports `SYSTEM_V1` and `SYSTEM_V2`. Set `MOMO_SYSTEM_VERSION=v1` or `v2` in the deployment and redeploy to compare. Default is v2.
