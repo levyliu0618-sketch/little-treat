@@ -4,7 +4,9 @@ An interactive mobile web prototype for a personal shopping sidekick. Make yours
 
 ## Open the app
 
-[Live demo](https://levyliu0618-sketch.github.io/little-treat/)
+[Live Momo app — Gemini connected](https://little-treat.vercel.app/)
+
+[Static GitHub Pages demo](https://levyliu0618-sketch.github.io/little-treat/) (no server API on this host).
 
 ## Make your own version with an AI agent
 
