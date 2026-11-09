@@ -10,8 +10,9 @@ module.exports=async function handler(req,res){
  if(origin){try{if(new URL(origin).host!==host)return res.status(403).json({error:'origin',message:'Open Momo on this website to chat.'});}catch{return res.status(403).json({error:'origin'});}}
  if(!process.env.GEMINI_API_KEY)return res.status(503).json({error:'not_configured',message:'Live chat is not connected on this host yet. You can try the clearly labeled demo.'});
  if(!allow(String(req.headers['x-forwarded-for']||'local').split(',')[0]))return res.status(429).json({error:'rate_limit',message:'A tiny breather: please wait a minute, then try again.'});
+ const systemVersion=['v1','v2','v3'].includes(process.env.MOMO_SYSTEM_VERSION)?process.env.MOMO_SYSTEM_VERSION:'v3';
  let data;
- try{const body=typeof req.body==='string'?JSON.parse(req.body):req.body;if(!body||JSON.stringify(body).length>45000)throw Error();data=buildRequest(body,process.env.MOMO_SYSTEM_VERSION==='v1'?'v1':'v2');}catch{return res.status(400).json({error:'invalid_request',message:'That message could not be read. Please try a shorter message.'});}
+ try{const body=typeof req.body==='string'?JSON.parse(req.body):req.body;if(!body||JSON.stringify(body).length>45000)throw Error();data=buildRequest(body,systemVersion);}catch{return res.status(400).json({error:'invalid_request',message:'That message could not be read. Please try a shorter message.'});}
  const model=process.env.GEMINI_MODEL||'gemini-3.5-flash-lite';
  if(!/^[a-z0-9.-]+$/.test(model))return res.status(503).json({error:'configuration',message:'Live chat needs a model configuration check.'});
  data.payload.generationConfig.thinkingConfig=model.startsWith('gemini-2.5')?{thinkingBudget:0}:{thinkingLevel:'minimal'};
@@ -24,6 +25,6 @@ module.exports=async function handler(req,res){
   const commentarySafe=!/[0-9$€£]|Ulta|Sephora|Amazon|Walmart|Nordstrom|Target|Brand website/i.test(text);
   const calculatedOnly=data.priceQuestion&&!commentarySafe;
   const reply=data.priceQuestion?data.calculatorSummary+(commentarySafe?'\n\n'+text:''):text;
-  return res.status(200).json({text:reply.slice(0,6000),mode:calculatedOnly?'calculated':'live',model,systemVersion:process.env.MOMO_SYSTEM_VERSION==='v1'?'v1':'v2',retrievedIds:data.retrievedIds});
+  return res.status(200).json({text:reply.slice(0,6000),mode:calculatedOnly?'calculated':'live',model,systemVersion,retrievedIds:data.retrievedIds});
  }catch{return res.status(504).json({error:'timeout',message:'Momo’s connection took too long. Try again, or choose the labeled demo.'});}
 };
