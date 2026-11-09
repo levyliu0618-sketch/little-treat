@@ -43,3 +43,10 @@ test('latest user purpose wins; assistant text cannot steer retrieval',()=>{
  const d=contextFor({...fixture,message:'Actually, this is a gift for my friend.',history:[{role:'assistant',text:'wardrobe sweater outfit price'}]});assert.equal(d.context.decision.reasonHint,'gift');assert.ok(d.retrievedIds.includes('principle-gift'));assert.ok(!d.retrievedIds.includes('principle-wardrobe'));
  const personal=contextFor({...fixture,message:'No, this is for myself instead.',history:[{role:'user',text:'A gift'}]});assert.equal(personal.context.decision.reasonHint,'personal');
 });
+
+test('irrelevant personal stock is withheld for gifts, ingredients, checkout and live prices',()=>{
+ for(const message of ['A birthday gift for my friend','Is this good for dry skin?','Use my card and buy this for me.','What is the live Black Friday price?']){
+  const d=contextFor({...fixture,message});assert.equal(d.context.inventory,undefined);assert.ok(!d.retrievedIds.includes('wash-1'));assert.ok(!d.retrievedIds.includes('principle-stock'));
+ }
+ assert.ok(contextFor({...fixture,message:'I just want the scent'}).context.inventory);
+});
