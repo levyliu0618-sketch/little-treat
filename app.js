@@ -105,7 +105,7 @@ async function respond(text,retry=false){
  if(!retry)messages.push({role:'user',text});
  lastChatText=text;chatPending=true;chatFailure='';const ticket=++chatRequest;
  chatController=new AbortController();const timer=setTimeout(()=>chatController?.abort(),27000);
- const history=messages.slice(0,-1).filter(m=>m.role==='user'||m.mode==='live').slice(-10).map(({role,text})=>({role,text}));
+ const history=messages.slice(0,-1).filter(m=>m.role==='user'||m.mode==='live'||m.mode==='calculated').slice(-10).map(({role,text})=>({role,text}));
  renderChat();
  try{
   const response=await fetch('api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...momoContext(),message:text,history}),signal:chatController.signal});
