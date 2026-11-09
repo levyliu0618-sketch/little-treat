@@ -17,7 +17,7 @@ A shared URL lets a tool read public source when it supports browsing or GitHub 
 
 ## Run locally
 
-No installation, build step, API key, or paid service is required. From this folder:
+Static browsing needs no key. For a local preview including the chat endpoint (Node 22+), run `node dev-server.cjs`. With no server key configured, chat offers an explicitly labeled scripted demo. For a static-only preview:
 
 ```sh
 python3 -m http.server 8000
@@ -40,10 +40,18 @@ Open Compare, switch Almond body wash from 500 ml to the distinct 100 ml bottle,
 
 ## What is simulated
 
-Prices and products are fictional demonstration data. Momo uses local scripted responses, not a connected language model. There is no checkout, live price tracking, automatic photo recognition, or account system. Inventory, preferences, wishlist and uploaded images stay in this browser's local storage. Use Reset demo to reset that browser's demo.
+Prices and products are fictional demonstration data. Momo calls Gemini through a server-only Vercel function when deployed with GEMINI_API_KEY. Welcome text and optional scripted fallback are explicitly labeled. GitHub Pages alone cannot run that function. There is no checkout, live price tracking, automatic photo recognition, or account system. Inventory, preferences, wishlist and uploaded images are saved in this browser’s local storage. During live chat, text messages, selected inventory records and shopping preferences are sent through Vercel to Google; photos are excluded. Free-tier data may be used by Google to improve products. Avoid private details. Use Reset demo to reset that browser's demo.
 
 ## Publish your fork
 
 In your fork, open Settings → Pages, choose Deploy from a branch, then main and /(root). Save. Update the demo link in your README to match your GitHub username and repository name.
 
 Artwork was AI-generated for this prototype. Retailer logos belong to their respective owners and are used only to identify example platforms; no affiliation is implied. See assets/logos/SOURCES.txt.
+
+## Live Gemini deployment
+
+Import this repository into Vercel with the Other preset, root directory `/`, no build command and no custom output directory. Use the free Hobby plan for this personal prototype. Add `GEMINI_API_KEY` as a **sensitive server environment variable** before deployment. Never put it in app.js, GitHub, a URL, or client-visible variables. `GEMINI_MODEL` defaults to `gemini-2.5-flash-lite`; `MOMO_SYSTEM_VERSION` defaults to `v2`. Free availability/quota is determined by the Google project; this code does not activate billing.
+
+The same-origin `/api/chat` endpoint runs on Vercel. GitHub Pages remains a static prototype with a clearly labeled fallback. Use the Vercel URL for real chat. The frontend does not switch quietly to scripts on failure.
+
+Run `node --test tests/*.test.cjs` for contract/privacy/calculation tests. See [system card](docs/MOMO-SYSTEM-CARD.md) and [evaluation scenarios](docs/evaluation-cases.json) for reproducible model evaluation. Unit tests use a mocked provider; live verification must be performed separately after deployment.

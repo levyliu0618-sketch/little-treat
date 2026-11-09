@@ -57,3 +57,12 @@
 /* A shared 4 CSS-pixel contour follows every product, never its rectangular crop. */
 .product-cutout{display:block;overflow:visible;background:transparent;filter:url(#product-sticker-outline);mix-blend-mode:normal;flex-shrink:0}
 .product-cutout>svg{display:block;width:100%;height:100%;overflow:hidden}
+
+/* Live chat: retain the existing bubble and phone design. */
+.chat-privacy{font-size:10px;line-height:1.45;opacity:.72;margin:0 0 18px}
+.chat-tools{display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 8px}
+.chat-tools button,.chat-error button{border:1px solid #d4d2c4;border-radius:18px;padding:8px 11px;background:transparent;color:var(--blue,#393b94);font:inherit;font-size:11px}
+.chat-error{border:1px solid #d4d2c4;border-radius:15px;padding:12px;margin:14px 0;font-size:12px;line-height:1.5}
+.chat-error p{margin:0 0 8px}.chat-error button{margin:3px}
+.momo-thinking{font-size:12px;color:var(--blue,#393b94)}
+#chat-form button:disabled{opacity:.4}#chat-form input:disabled{opacity:.7}
