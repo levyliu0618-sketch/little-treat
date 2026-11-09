@@ -21,6 +21,9 @@ module.exports=async function handler(req,res){
   const result=await response.json(),candidate=result.candidates?.[0];
   const text=candidate?.content?.parts?.filter(p=>!p.thought&&typeof p.text==='string').map(p=>p.text).join('\n').trim();
   if(!text||!['STOP','MAX_TOKENS'].includes(candidate.finishReason))return res.status(502).json({error:'no_reply',message:'Gemini did not return a usable reply. Try rephrasing your message.'});
-  return res.status(200).json({text:text.slice(0,6000),mode:'live',model,systemVersion:process.env.MOMO_SYSTEM_VERSION==='v1'?'v1':'v2',retrievedIds:data.retrievedIds});
+  const commentarySafe=!/[0-9$€£]|Ulta|Sephora|Amazon|Walmart|Nordstrom|Target|Brand website/i.test(text);
+  const calculatedOnly=data.priceQuestion&&!commentarySafe;
+  const reply=data.priceQuestion?data.calculatorSummary+(commentarySafe?'\n\n'+text:''):text;
+  return res.status(200).json({text:reply.slice(0,6000),mode:calculatedOnly?'calculated':'live',model,systemVersion:process.env.MOMO_SYSTEM_VERSION==='v1'?'v1':'v2',retrievedIds:data.retrievedIds});
  }catch{return res.status(504).json({error:'timeout',message:'Momo’s connection took too long. Try again, or choose the labeled demo.'});}
 };

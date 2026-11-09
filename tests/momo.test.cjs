@@ -18,5 +18,7 @@ test('API contract, errors, live provenance and no provider secret leaks',async(
   global.fetch=async()=>({ok:false,status:429});r=res();await handler(req(),r);assert.equal(r.code,429);assert.equal(r.data.error,'provider_quota');assert.ok(!JSON.stringify(r).includes('test-only'));
   global.fetch=async()=>{throw Error('secret upstream details')};r=res();await handler(req(),r);assert.equal(r.code,504);assert.ok(!JSON.stringify(r).includes('secret upstream'));
   global.fetch=async()=>({ok:true,json:async()=>({candidates:[{finishReason:'SAFETY'}]})});r=res();await handler(req(),r);assert.equal(r.code,502);assert.equal(r.data.error,'no_reply');
+  global.fetch=async()=>({ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:'Ulta is cheapest at $14.93.'}]}}]})});r=res();await handler(req({body:{...fixture,message:'Which mini is cheapest?'}}),r);assert.equal(r.data.mode,'calculated');assert.ok(r.data.text.includes('Brand website, $14.50'));assert.ok(!r.data.text.includes('Ulta is cheapest'));
+  global.fetch=async()=>({ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:'The mini lets you try a scent with a smaller commitment.'}]}}]})});r=res();await handler(req({body:{...fixture,message:'Compare both sizes.'}}),r);assert.equal(r.data.mode,'live');assert.ok(r.data.text.includes('Brand website, $14.50'));assert.ok(r.data.text.includes('smaller commitment'));
  }finally{global.fetch=original;if(oldKey===undefined)delete process.env.GEMINI_API_KEY;else process.env.GEMINI_API_KEY=oldKey;}
 });
