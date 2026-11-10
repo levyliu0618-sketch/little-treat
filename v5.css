@@ -1,0 +1,116 @@
+/* Little Treat v5 — night-blue stage around a cream phone. Loaded last. */
+:root {
+  --night: #252a63;      /* deep indigo, same family as the app's blue buttons */
+  --night-2: #1d2152;
+  --cream: #f7f0dc;      /* text on night */
+  --cream-dim: #c9c7de;  /* secondary text on night */
+  --butter: #f3d98a;     /* the one bright accent, used sparingly */
+}
+
+/* ---------- Stage ---------- */
+body { background: var(--night); color: var(--cream); }
+.desktop-header, .desktop-footer { background: transparent; color: var(--cream); border-color: rgba(247,240,220,.14); }
+.wordmark { color: var(--cream); }
+.desktop-header > span { color: var(--cream-dim); }
+.desk-actions button { color: var(--cream); border-color: rgba(247,240,220,.35); }
+.desk-actions button:hover { background: rgba(247,240,220,.08); }
+#present-btn { color: var(--night); background: var(--cream); border-color: var(--cream); }
+#present-btn:hover { background: #fff; }
+
+.stage {
+  max-width: 1320px; margin: 0 auto; padding: 18px 56px;
+  grid-template-columns: minmax(320px, 1fr) calc(402px * var(--phone-scale)) minmax(200px, 300px);
+  gap: 56px; align-items: center; justify-content: stretch;
+}
+
+/* ---------- Left: headline + the story as numbered steps ---------- */
+.intro { max-width: 440px; justify-self: end; }
+.intro .eyebrow { color: var(--cream-dim); font-size: 10px; letter-spacing: 1.8px; }
+.intro h1 { color: var(--cream); font-size: 66px; letter-spacing: -2.4px; line-height: 1; margin: 20px 0 18px; }
+.intro h1 em { color: var(--butter); }
+.intro > p { color: var(--cream-dim); font-size: 14px; line-height: 1.7; }
+.walkthrough { border-top: 1px solid rgba(247,240,220,.16); margin-top: 26px; padding-top: 20px; }
+.walkthrough .eyebrow { color: var(--cream-dim); }
+#story-steps { list-style: none; padding: 0; margin: 12px 0 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 18px; }
+#story-steps button {
+  all: unset; box-sizing: border-box; cursor: pointer; display: flex; gap: 10px; align-items: baseline;
+  width: 100%; padding: 7px 0; font-size: 13px; color: var(--cream-dim); border-bottom: 1px solid rgba(247,240,220,.1);
+}
+#story-steps b { font-size: 10px; font-weight: 500; letter-spacing: 1px; color: rgba(247,240,220,.45); width: 18px; }
+#story-steps button:hover, #story-steps button:focus-visible { color: var(--cream); }
+#story-steps .done button { color: var(--cream); }
+#story-steps .done b { color: var(--cream-dim); }
+#story-steps .now button { color: var(--butter); border-bottom-color: var(--butter); }
+#story-steps .now b { color: var(--butter); }
+.walkthrough p#story-copy { color: var(--cream-dim); font-size: 12px; line-height: 1.6; min-height: 40px; margin: 0 0 14px; }
+.story-button { background: var(--cream); color: var(--night); font-weight: 600; font-size: 13px; padding: 13px 20px; border-radius: 26px; }
+.story-button:hover { background: #fff; color: var(--night); }
+#story-progress { display: none; }
+
+/* ---------- Right: the girl in cream linework, sitting beside the phone ---------- */
+.margin-note { align-self: end; justify-self: start; color: var(--cream-dim); font-size: 12px; line-height: 1.7; max-width: 260px; padding-bottom: 30px; transform: none; }
+#desktop-character { margin: 0 0 18px -30px; }
+.night-character { display: block; width: 230px; height: auto; opacity: .95; transition: transform .4s cubic-bezier(.3,1.3,.5,1); }
+.night-character:hover { transform: rotate(-2deg) translateY(-4px); }
+.margin-note .eyebrow { color: var(--cream); display: block; }
+.margin-note .note-line { background: var(--butter); }
+.margin-note button { color: var(--cream); border-color: rgba(247,240,220,.4); }
+.margin-note .small-print { color: rgba(247,240,220,.5); }
+.phone-caption { color: var(--cream-dim); }
+.desktop-footer { color: rgba(247,240,220,.55); }
+
+/* The phone pops off the night background. */
+.phone { box-shadow: 0 0 0 1px #4a4f7e, 0 0 0 3px #11143a, 0 34px 70px rgba(8,10,40,.55); }
+
+/* ---------- Momo in the tab bar: big dog, zero overlap ---------- */
+#buddy-fab { display: none !important; }
+#nav { gap: 0; }
+#nav button { flex: 1; }
+.nav-momo { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; font-size: 10px; color: var(--blue); background: none; border: 0; cursor: pointer; padding: 0; font-family: inherit; }
+.nav-momo-face {
+  width: 54px; height: 54px; margin-top: -14px; border-radius: 50%; background: var(--paper);
+  border: 2px solid var(--blue); box-shadow: 0 4px 12px rgba(52,61,140,.22); display: grid; place-items: center; overflow: hidden;
+  transition: transform .25s cubic-bezier(.3,1.5,.5,1);
+}
+.nav-momo-face .dog { width: 46px; height: 44px; }
+.nav-momo:hover .nav-momo-face { transform: translateY(-3px) rotate(-4deg); }
+.nav-momo:after { content: ""; position: absolute; top: -12px; right: calc(50% - 28px); width: 11px; height: 11px; border-radius: 50%; background: var(--blue); border: 2px solid var(--paper); }
+.nav-momo.perk .nav-momo-face { animation: perk .9s ease; }
+.phone:not([data-page="home"]) .app { padding-bottom: 82px; }
+#nudge { bottom: 104px; left: 34px; right: 34px; }
+.nudge:after { right: auto; left: calc(50% - 5px); }
+
+/* ---------- Small refinements borrowed from the references ---------- */
+/* Costra: each product sits on its own soft card. */
+.product-picture { background: #fffdf5; border: 1px solid #ebe6d4; border-radius: 18px; }
+.product-card .heart-btn { top: 8px; right: 8px; }
+/* Stack-style pill labels on room items. */
+.item-tip { border: 1px solid var(--ink); border-radius: 20px; font-size: 10px; letter-spacing: .2px; }
+/* Chat: tools only appear when the conversation calls for them. */
+.chat-tools { margin-top: 4px; }
+
+/* ---------- Narrower desktops ---------- */
+@media (max-width: 1180px) {
+  .stage { grid-template-columns: minmax(280px, 1fr) calc(402px * var(--phone-scale)); padding: 18px 36px; gap: 48px; }
+  .margin-note { display: none; }
+  .intro h1 { font-size: 54px; }
+}
+@media (min-width: 761px) and (max-height: 760px) {
+  .intro h1 { font-size: 48px; margin: 12px 0; }
+  #story-steps button { padding: 5px 0; font-size: 12px; }
+  .night-character { width: 180px; }
+}
+/* Present mode keeps the night background, phone only. */
+body.present .stage { grid-template-columns: calc(402px * var(--phone-scale)); justify-content: center; }
+body.present .intro, body.present .margin-note { display: none; }
+
+/* Phones: the app fills the screen, no stage. */
+@media (max-width: 760px) {
+  body { background: var(--paper); }
+  #nudge { left: 20px; right: 20px; }
+}
+/* Inside the phone, keep the app's own ink colors. */
+html:root { background: var(--night); }
+.phone { color: var(--ink); }
+.margin-note p { color: var(--cream-dim); }
+@media (max-width: 760px) { html:root { background: var(--paper); } }
